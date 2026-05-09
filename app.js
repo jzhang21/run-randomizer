@@ -280,6 +280,14 @@ document.addEventListener("DOMContentLoaded", () => {
     setSpotifyPlaylistCtaCreate();
   }
 
+  function spotifyPlaylistEligible() {
+    return (
+      window.RunRandomizerSpotify &&
+      RunRandomizerSpotify.isConfigured() &&
+      RunRandomizerSpotify.isLoggedIn()
+    );
+  }
+
   function showPlaylistPanelAfterRoll(distRoll, includePace, paceRoll) {
     const paceMin =
       includePace && paceRoll != null ? paceRoll : DEFAULT_PACE_FOR_PLAYLIST;
@@ -290,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ? formatPaceMinutesPerMile(paceRoll).replace(" / mi", "/mi")
         : `${DEFAULT_PACE_FOR_PLAYLIST}:00/mi`;
     spotifyTargetLine.textContent = `About ${targetMin} min of music (${formatMiles(distRoll)} at ${paceBit}).`;
-    spotifyPlaylistPanel.hidden = false;
+    spotifyPlaylistPanel.hidden = !spotifyPlaylistEligible();
     resetSpotifyPlaylistUi();
     refreshBuildPlaylistButton();
   }
