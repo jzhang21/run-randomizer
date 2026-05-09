@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Run Randomizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-grid"></div>
+    <main class="shell">
+      <header class="hero">
+        <h1>Run Randomizer</h1>
+        <p class="eyebrow">Roll your workout</p>
+      </header>
+
+      <form id="run-form" class="card form-card" novalidate>
+        <fieldset class="field-group">
+          <legend>Distance (miles) <span class="req">*</span></legend>
+          <div class="row">
+            <label class="field">
+              <span class="label-text">Min</span>
+              <input
+                type="number"
+                id="dist-min"
+                name="distMin"
+                min="0"
+                step="0.1"
+                required
+                placeholder="e.g. 3.1"
+              />
+            </label>
+            <label class="field">
+              <span class="label-text">Max</span>
+              <input
+                type="number"
+                id="dist-max"
+                name="distMax"
+                min="0"
+                step="0.1"
+                required
+                placeholder="e.g. 8"
+              />
+            </label>
+          </div>
+          <p class="hint">Use at most one decimal place (e.g. 9.2, not 9.02).</p>
+        </fieldset>
+
+        <fieldset class="field-group">
+          <legend>Pace (min/mile) <span class="optional">optional</span></legend>
+          <div class="row">
+            <label class="field">
+              <span class="label-text">Min</span>
+              <input
+                type="number"
+                id="pace-min"
+                name="paceMin"
+                min="0"
+                step="0.25"
+                placeholder="e.g. 7.5"
+              />
+            </label>
+            <label class="field">
+              <span class="label-text">Max</span>
+              <input
+                type="number"
+                id="pace-max"
+                name="paceMax"
+                min="0"
+                step="0.25"
+                placeholder="e.g. 10"
+              />
+            </label>
+          </div>
+          <p class="hint">Use 0.25 increments (e.g. 8, 8.25, 8.5, 8.75)</p>
+        </fieldset>
+
+        <p id="form-error" class="form-error" role="alert" hidden></p>
+
+        <button type="submit" class="btn primary" id="submit-btn">
+          Roll Dice
+        </button>
+      </form>
+
+      <section class="card spotify-card" aria-label="Spotify">
+        <h2 class="spotify-title">
+          Spotify Playlist <span class="optional">optional</span>
+        </h2>
+        <p class="hint spotify-lede">
+          Connect your account. After you roll, you can create a private playlist
+          about as long as your run from your top tracks.
+        </p>
+        <p id="spotify-bar-status" class="spotify-bar-status" role="status"></p>
+        <div class="spotify-bar-actions">
+          <button type="button" class="btn secondary" id="spotify-connect-btn">
+            Connect Spotify
+          </button>
+          <button
+            type="button"
+            class="spotify-disconnect"
+            id="spotify-disconnect-btn"
+            hidden
+          >
+            Disconnect
+          </button>
+        </div>
+      </section>
+
+      <section id="roll-stage" class="card roll-stage" aria-live="polite" hidden>
+        <div class="roll-header">
+          <h2>Rolling…</h2>
+        </div>
+
+        <div class="dice-row" id="dice-row">
+          <!-- dice injected by JS -->
+        </div>
+
+        <div id="roll-results" class="roll-results" hidden>
+          <dl class="results-list">
+            <div class="result-block">
+              <dt>Distance</dt>
+              <dd id="result-distance">—</dd>
+            </div>
+            <div class="result-block" id="pace-result-block" hidden>
+              <dt>Target pace</dt>
+              <dd id="result-pace">—</dd>
+            </div>
+          </dl>
+          <button type="button" class="btn primary" id="again-btn">
+            Roll Again
+          </button>
+          <div id="spotify-playlist-panel" class="spotify-playlist-panel" hidden>
+            <p class="spotify-target-line" id="spotify-target-line"></p>
+            <button
+              type="button"
+              class="btn primary spotify-playlist-cta"
+              id="spotify-build-playlist-btn"
+            >
+              <span class="spotify-playlist-cta-text">Create Playlist</span>
+              <svg
+                class="spotify-playlist-cta-logo"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill="#0d4f2e"
+                  d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"
+                />
+              </svg>
+            </button>
+            <p id="spotify-playlist-msg" class="spotify-playlist-msg" role="status"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="spotify-config.js"></script>
+    <script src="spotify.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
